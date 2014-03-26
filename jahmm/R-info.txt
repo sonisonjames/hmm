@@ -1,0 +1,110 @@
+Howto get help on a function
+============================
+
+help(qplot)
+
+or
+
+?qplot
+
+Both of these will open the help in the browser
+
+Howto get/set pwd
+=================
+
+Get pwd: getwd()
+
+Set pwd: setwd("c:/mfe/project/hmm")
+
+Get the dir: dir()
+
+Howto read from a file
+======================
+
+Assuming we have a data file, w/o column headings
+
+matrix <- read.csv("/path/to/file", header=FALSE, sep=";")
+
+This reads the file as a matrix, each sep defines a column
+
+To get the names of the columns that are auto generated do:
+
+names(matrix)
+
+To get all the attributes:
+
+attributes(matrix)
+
+This prints 3 attributes - column names, class, row names. Each of these three attributes can be obtained like this:
+
+names(matrix)
+class(matrix)
+row.names(matrix)
+
+Howto plot a step function in R
+================================
+We need to make a step function that is piecewise continuous. For e.g. if the data is:
+y = {1,1,0,0,1}
+
+And the x values are:
+x = {1,2,3,4}  
+
+y must be one longer than x
+
+b/w 0 and 1 value is 1
+b/w 1 and 2 value is 1
+b/w 2 and 3 value is 0, ...
+
+First create a stepfun:
+
+f <- stepfun(x, y)
+plot(f, x)
+
+Easier way to plot step function
+=================================
+I want to load a data file that has 20000 state seq but want to plot the step function using the last 5000 state seqs only. i.e. skip the first 15000 state seq
+
+> state <- read.csv("state.seq", header=FALSE, sep=";")
+> y <- state[1, 15001:20000]
+> x <- 1:5000
+> plot(x, y, type="s")
+
+Method1-How to plot two graphs in one plot
+==========================================
+state.seq <- read.csv("state.seq", header=FALSE, sep=";")
+x <- 1:5001
+y1 <- state.seq[1, 15000:20000]
+
+state.pred <- read.csv("state.pred", header=FALSE)
+y2 <- state.pred[, 2]
+
+plot(x, y1, type="s")
+lines(x, y2, col="green")
+
+
+Method2-using ggplot2 to plot two graphs in one plot
+======================================================
+The above method is not exactly correct since y1 is actually a data.frame, but somehow plot manages to plot using it also
+
+From: http://stackoverflow.com/questions/2564258/plot-2-graphs-in-same-plot-in-r
+
+state.seq <- read.csv("state.seq", header=FALSE, sep=";")
+
+y1 <- c()
+for (i in 15000:20000) {
+	y1 <- c(y1, state.seq[1, i])
+}
+
+state.pred <- read.csv("state.pred", header=FALSE)
+
+y2 <- state.pred[,2]
+
+# create a data frame
+df <- data.frame(x, y1, y2)
+
+require(ggplot2)
+
+ggplot(df, aes(x)) +                    # basic graphical object
+  geom_line(aes(y=y1)) +  # first layer
+  geom_line(aes(y=y2), colour="blue", alpha=I(1/3))  # second layer
+

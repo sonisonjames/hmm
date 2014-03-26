@@ -1,0 +1,28 @@
+Hmm v1.0
+
+NbStates 4
+
+State
+Pi 0.25
+A 0.90 0.02 0.04 0.04 
+GaussianOPDF [0.0 1.0]
+
+
+State
+Pi 0.25
+A 0.05 0.90 0.04 0.01 
+GaussianOPDF [0.0 2.0]
+
+
+State
+Pi 0.25
+A 0.01 0.01 0.90 0.08 
+GaussianOPDF [0.0 3.0]
+
+
+State
+Pi 0.25
+A 0.01 0.01 0.03 0.95 
+GaussianOPDF [0.0 1.0]
+
+
